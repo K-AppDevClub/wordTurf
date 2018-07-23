@@ -66,6 +66,7 @@
         </tr> -->
       </tbody>
     </table>
+    <v-ons-button @click="go()">押せ</v-ons-button>
   </v-ons-page>
 </template>
 
@@ -105,8 +106,21 @@ export default {
       else {
           this.calData.month++;
       }
+    },
+    go(){
+      this.axios.post('https://language.googleapis.com/v1/documents:analyzeSentiment?key=AIzaSyDzdTDDNFQ9STkA1bfGEcUnlxgpvFLrEL0',this.postdata)
+      .then((res) => {
+        console.log(res);
+        //this.experiences = res.data
+      })
+      .catch(error => {
+          this.sending = false
+          throw error
+      })
+
     }
   },
+
   data() {
     return {
       weeks: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
@@ -114,7 +128,14 @@ export default {
       users: [
         { name: 'Foo Bar', email: 'foo@bar.com' },
         { name: 'John Doh', email: 'john@doh.com' }
-      ]
+      ],
+      postdata: {
+        document: {  
+          type:"PLAIN_TEXT",
+        　content:"あなたのこと大好き" 
+        },
+        encodingType: 'UTF8'
+      },
     };
   },
   created() {
