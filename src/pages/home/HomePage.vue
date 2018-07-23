@@ -20,7 +20,7 @@
       <v-ons-list-item @click="goRegion">並び順：人気順</v-ons-list-item>
     </v-ons-list>
     <!-- <v-ons-list-header>話題のデート体験記</v-ons-list-header> -->
-    <v-ons-card v-for='item in experiences' :v-bind='item' v-bind:key="item.id" @click="goPlan(item.id)">
+    <v-ons-card v-for='item in experiences' :v-bind='item' v-bind:key="item.id">
       <img v-bind:src="item.courses[0].thumbnail" style="width: 100%">
       <div class="title">
         {{ item.title }}
@@ -32,6 +32,8 @@
     <v-ons-fab @click="goCreate" style="position:fixed;" modifier="material" position="bottom right" >
       <v-ons-icon icon="md-plus"></v-ons-icon>
     </v-ons-fab>
+    <v-ons-button @click="go()">押せ</v-ons-button>
+    
   </div>
   </v-ons-page>
 </template>
@@ -65,14 +67,20 @@ export default {
         }
       })
     },
+    go(){
+      this.axios.post('https://language.googleapis.com/v1/documents:analyzeSentiment?key=AIzaSyDzdTDDNFQ9STkA1bfGEcUnlxgpvFLrEL0',this.postdata)
+      .then((res) => {
+        console.log(res);
+        //this.experiences = res.data
+      })
+      .catch(error => {
+          this.sending = false
+          throw error
+      })
+
+    }
   },
-  created() {
-    this.axios.get("http://59.157.6.140:3000/plans")
-    .then((res) => {
-      console.log(res.data);
-      this.experiences = res.data
-    });
-  },
+  
   data() {
     return {
       config: Config,
@@ -92,6 +100,13 @@ export default {
           courses: [{thumbnail:""}]
         },
       ],
+      postdata: {
+        document: {  
+          type:"PLAIN_TEXT",
+        　content:"あなたのこと大好き" 
+        },
+        encodingType: 'UTF8'
+      },
     };
   },
   computed: {
