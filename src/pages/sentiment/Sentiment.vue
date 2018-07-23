@@ -1,47 +1,21 @@
 <template>
   <ons-page>
-    <navbar navType="back" msg="プラン詳細"></navbar>
+    <navbar navType="back"></navbar>
     <el-card class="box-card">
-        <div class="title">{{post.title}}
-          <div class="pull-right" style="font-size: 20px">
-            <i class="zmdi zmdi-comment-outline" style="color: green;" tappable @click="showPopover($event, 'left')"></i>
-            &nbsp;
-            &nbsp;
-            <i class="zmdi zmdi-favorite-outline" style="color: blue;"></i>
-            &nbsp;
-          </div>
+        <div class="title">
+          
         </div>
         <div class="pull-right" mergin-top="20px" > 作成者:hoshinari</div>
     </el-card>
-    <el-carousel :interval="5000" arrow="always">
-      <el-carousel-item v-for="item in items" :key="item" >
-        <img v-bind:src="item.src" width="500" height=auto class = "img">
-      </el-carousel-item>
-    </el-carousel>
     <el-card class="box-card">
         <div class="bold">概要</div>
-        <p>{{post.detail}}</p>
     </el-card>
     <el-card class="box-card">
         <div class="bold">コース</div>
-        <v-ons-list>
-          <v-ons-list-item v-for="course in courses" v-bind:key="course.id">
-            <table cellpadding="5">
-              <tr>
-                <td>{{ editTime(course.time) }}</td> 
-                <td>{{ course.name }}</td>
-              </tr>
-              <tr>
-                <td></td>
-                <td>{{ course.description }}</td>
-              </tr>
-            </table>
-          </v-ons-list-item>
-        </v-ons-list>
+        
     </el-card>
     <el-card class="box-card">
         <div class="bold">感想</div>
-        <p>{{post.comment}}</p>
         <p></p>
     </el-card>
   </ons-page>
@@ -49,13 +23,11 @@
 
 <script>
 import Navbar from '../../components/navbar/Navbar';
-import EhamaForm from '../../components/form/Form';
 
 export default {
-  name: 'detail-plan',
+  name: 'sentiment',
   components: {
     Navbar,
-    EhamaForm,
   },
   props: {
     plan_id: {
@@ -64,7 +36,6 @@ export default {
   },
   data() {
     return {
-      url: `http://59.157.6.140:3000/plans/${this.plan_id}`,
       post: [],
       courses: [],
       value1: '',
@@ -80,15 +51,6 @@ export default {
       ]
     };
   },
-  created() {
-    this.axios.get(this.url)
-    .then((res) => {
-      this.post = res.data;
-      this.courses = res.data.courses;
-      console.log(this.courses);
-    });
-  },
-
   methods: {
     editTime(time){
       if(time){

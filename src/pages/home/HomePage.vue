@@ -67,14 +67,12 @@
       </tbody>
     </table>
     <v-ons-button @click="go()">押せ</v-ons-button>
+  <v-ons-button @click="page()">ページ遷移 </v-ons-button>
   </v-ons-page>
 </template>
 
 <script>
 import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
-import CreatePlan from '../../pages/create-plan/CreatePlan';
-import RegionPage from '../../pages/region/Region';
-import DetailPlan from '../../pages/detail-plan/DetailPlan';
 import Navbar from '../../components/navbar/Navbar';
 import Config from '../../config/Config';
 
@@ -118,6 +116,9 @@ export default {
           throw error
       })
 
+    },
+    page(){
+      this.$router.push({ name: 'sentiment'}); 
     }
   },
 
