@@ -6,66 +6,81 @@
   margin-top: 50px;
 }
 #calendar-nav {
-    text-align: center;
+  text-align: center;
 }
 
 #calendar-nav span {
-    display: inline-block;
-    width: 200px;
+  display: inline-block;
+  width: 200px;
 }
 
 #calendar-nav i:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 /* カレンダーのスタイル */
 .table th, td{
-    text-align: center;
+  text-align: center;
 }
 
 #calendar th:first-child {
-    background-color: #FEEEFF;
+  background-color: #FEEEFF;
 }
 #calendar td:first-child {
-    background-color: #FEEEFF;
+  background-color: #FEEEFF;
 }
 #calendar th:nth-child(7) {
-    background-color: #DFFFFF
+  background-color: #DFFFFF
 }
 #calendar td:nth-child(7) {
-    background-color: #DFFFFF
+  background-color: #DFFFFF
 }
 
 #calendar td:hover {
-    opacity: 0.6;
+  opacity: 0.6;
+}
+.calendar {
+  text-align: center;
+  // width: 500px;
+  // margin: 0 auto;
+}
+.child_calendar {
+  display: inline-block;
 }
 </style>
 
 <template>
   <v-ons-page>
     <navbar></navbar>
-    <div id="calendar-nav">
-      <i class="zmdi zmdi-comment-outline" tappable @click="moveLastMonth"></i>
-      <span>{{calData.year}} - {{getMonthName(calData.month)}}</span>
-      <i class="zmdi zmdi-comment-outline" tappable @click="moveNextMonth"></i>
-    </div>
+    <v-ons-card modifier="material">
+      <div id="calendar-nav">
+        <i class="zmdi zmdi-comment-outline" tappable @click="moveLastMonth"></i>
+        <span>{{calData.year}} - {{getMonthName(calData.month)}}</span>
+        <i class="zmdi zmdi-comment-outline" tappable @click="moveNextMonth"></i>
+      </div>
+      <br>
 
-    <table id="calendar" class="table table-bordered">
-      <thead>
-        <tr>
-          <th v-for="week in weeks">{{week}}</th>
-          <!-- <th v-repeat="week in weeks">{{week}}</th> -->
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="week in calendar">
-          <td v-for="day in week">{{day.day}}</td>
-        </tr>
-        <!-- <tr v-repeat="week: calendar">
-          <td v-repeat="day: week">{{day.day}}</td>
-        </tr> -->
-      </tbody>
-    </table>
+      <div class="calendar">
+        <div class="child_calendar">
+        <table id="calendar" class="table table-bordered">
+          <thead>
+            <tr>
+              <th width="50" v-for="week in weeks">{{week}}</th>
+              <!-- <th v-repeat="week in weeks">{{week}}</th> -->
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="week in calendar">
+              <td v-for="day in week">{{day.day}}</td>
+            </tr>
+            <!-- <tr v-repeat="week: calendar">
+              <td v-repeat="day: week">{{day.day}}</td>
+            </tr> -->
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </v-ons-card>
     <v-ons-button @click="go()">押せ</v-ons-button>
   </v-ons-page>
 </template>
