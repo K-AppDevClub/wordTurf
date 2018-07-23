@@ -5,34 +5,67 @@
 .body {
   margin-top: 50px;
 }
+#calendar-nav {
+    text-align: center;
+}
+
+#calendar-nav span {
+    display: inline-block;
+    width: 200px;
+}
+
+#calendar-nav i:hover {
+    cursor: pointer;
+}
+
+/* カレンダーのスタイル */
+.table th, td{
+    text-align: center;
+}
+
+#calendar th:first-child {
+    background-color: #FEEEFF;
+}
+#calendar td:first-child {
+    background-color: #FEEEFF;
+}
+#calendar th:nth-child(7) {
+    background-color: #DFFFFF
+}
+#calendar td:nth-child(7) {
+    background-color: #DFFFFF
+}
+
+#calendar td:hover {
+    opacity: 0.6;
+}
 </style>
 
 <template>
   <v-ons-page>
     <navbar></navbar>
-  <div class='page-content' align='center'>
-    <v-ons-list> 
-      <v-ons-list-header>
-        <v-ons-icon icon="ion-favorite, material:md-favorite"></v-ons-icon>
-        リスト
-      </v-ons-list-header>
-      <v-ons-list-item @click="goRegion">地域:  {{currentArea.name}}</v-ons-list-item>
-      <v-ons-list-item @click="goRegion">並び順：人気順</v-ons-list-item>
-    </v-ons-list>
-    <!-- <v-ons-list-header>話題のデート体験記</v-ons-list-header> -->
-    <v-ons-card v-for='item in experiences' :v-bind='item' v-bind:key="item.id" @click="goPlan(item.id)">
-      <img v-bind:src="item.courses[0].thumbnail" style="width: 100%">
-      <div class="title">
-        {{ item.title }}
-      </div>
-      <div class="content">
-        {{ item.detail }}
-      </div>
-    </v-ons-card>
-    <v-ons-fab @click="goCreate" style="position:fixed;" modifier="material" position="bottom right" >
-      <v-ons-icon icon="md-plus"></v-ons-icon>
-    </v-ons-fab>
-  </div>
+    <div id="calendar-nav">
+      <i class="zmdi zmdi-comment-outline" tappable @click="moveLastMonth"></i>
+      <span>{{calData.year}} - {{getMonthName(calData.month)}}</span>
+      <i class="zmdi zmdi-comment-outline" tappable @click="moveNextMonth"></i>
+    </div>
+
+    <table id="calendar" class="table table-bordered">
+      <thead>
+        <tr>
+          <th v-for="week in weeks">{{week}}</th>
+          <!-- <th v-repeat="week in weeks">{{week}}</th> -->
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="week in calendar">
+          <td v-for="day in week">{{day.day}}</td>
+        </tr>
+        <!-- <tr v-repeat="week: calendar">
+          <td v-repeat="day: week">{{day.day}}</td>
+        </tr> -->
+      </tbody>
+    </table>
   </v-ons-page>
 </template>
 
@@ -51,53 +84,78 @@ export default {
     Navbar,
   },
   methods: {
-    goCreate() {
-      this.$emit('push-page', CreatePlan)
+    getMonthName: function(month) {
+      var monthName = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+      return monthName[month - 1];
     },
-    goRegion() {
-      this.$emit('push-page', RegionPage)
+    moveLastMonth: function() {
+      if (this.calData.month == 1) {
+          this.calData.year--;
+          this.calData.month = 12;
+      }
+      else {
+          this.calData.month--;
+      }
     },
-    goPlan(id) {
-      this.$emit('push-page', {
-        extends: DetailPlan,
-        onsNavigatorProps: {
-          plan_id: id,
-        }
-      })
-    },
-  },
-  created() {
-    this.axios.get("http://59.157.6.140:3000/plans")
-    .then((res) => {
-      console.log(res.data);
-      this.experiences = res.data
-    });
+    moveNextMonth: function() {
+      if (this.calData.month == 12) {
+          this.calData.year++;
+          this.calData.month = 1;
+      }
+      else {
+          this.calData.month++;
+      }
+    }
   },
   data() {
     return {
-      config: Config,
-      experiences: [
-        {
-          title: 'えはまの奮発日記',
-          detail: 'tinderで知り合った女性と食事することになりました。しかし女性の右手には...',
-          path: 'detail-plan',
-          color: '#085078',
-          courses: [{thumbnail:""}]
-        },
-        {
-          title: 'sawlowの遅漏体験',
-          detail: '...',
-          path: 'detail-plan',
-          color: '#085078',
-          courses: [{thumbnail:""}]
-        },
-      ],
+      weeks: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+      calData: {year: 0, month: 0},
+      users: [
+        { name: 'Foo Bar', email: 'foo@bar.com' },
+        { name: 'John Doh', email: 'john@doh.com' }
+      ]
     };
   },
+  created() {
+    var date = new Date();
+    this.calData.year = date.getFullYear();
+    this.calData.month = date.getMonth() + 1;
+  },
   computed: {
-    currentArea() {
-      return this.$store.state.currentArea;
-    },
+    calendar () {
+      // 1日の曜日
+      var firstDay = new Date(this.calData.year, this.calData.month - 1, 1).getDay();
+      // 晦日の日にち
+      var lastDate = new Date(this.calData.year, this.calData.month, 0).getDate();
+      // 日にちのカウント
+      var dayIdx = 1;
+
+      var calendar = [];
+      for (var w = 0; w < 6; w++) {
+        var week = [];
+
+        // 空白行をなくすため
+        if (lastDate < dayIdx) {break;}
+
+        for (var d = 0; d < 7; d++) {
+          if (w == 0 && d < firstDay) {
+            week[d] = {day: ''};
+          } else if (w == 6 && lastDate < dayIdx) {
+            week[d] = {day: ''};
+            dayIdx++;
+          } else if (lastDate < dayIdx) {
+            week[d] = {day: ''};
+            dayIdx++;
+          } else {
+            week[d] = {day: dayIdx};
+            dayIdx++;
+          }
+        }
+        calendar.push(week);
+      }
+      return calendar;
+    }
   }
 };
 </script>
