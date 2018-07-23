@@ -60,6 +60,13 @@ export default {
         courses_attributes: {},
       },
       prefs: [],
+      postdata: {
+        "document": {
+          "type": "PLAIN_TEXT",
+          "content": "Google、クラウド自然言語APIを公開―英語、日本語、スペイン語に対応"
+        },
+        "encodingType": "UTF8"
+      },
     };
   },
   computed: {
@@ -68,7 +75,7 @@ export default {
     }
   },
   mounted() {
-    this.axios.get('http://59.157.6.140:3000/prefectures')
+    this.axios.post('https://language.googleapis.com/v1/documents:analyzeEntities',this.postdata)
     .then((res) => {
       this.prefs = res.data;
       this.prefs.unshift({id: null, name: 'エリアを選択'});
@@ -110,7 +117,7 @@ export default {
       this.courses.forEach((v)=>{
         this.plan.courses_attributes[v.uniq] = v
       });
-      this.axios.post('http://59.157.6.140:3000/plans', {
+      this.axios.post('', {
         plan: this.plan,
       })
       .then(res => {
