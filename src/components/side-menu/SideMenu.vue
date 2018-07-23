@@ -56,11 +56,6 @@ export default {
           routeName: 'posts',
           icon: 'fa-info',
         },
-        {
-          label: 'Test',
-          routeName: 'test',
-          icon: 'fa-info',
-        },
       ],
     };
   },
