@@ -47,6 +47,16 @@
 .child_calendar {
   display: inline-block;
 }
+#buttom_area{
+  text-align: center;
+  margin-top: 10px;
+}
+.analyze_buttom{
+  display: inline-block;
+}
+.clear_buttom{
+  display: inline-block;
+}
 </style>
 
 <template>
@@ -81,7 +91,24 @@
         </div>
       </div>
     </v-ons-card>
-    <v-ons-button @click="go()">押せ</v-ons-button>
+    <v-ons-card>
+      <v-ons-list-item>
+        <textarea style="width:100%;height:90px" name="code_ireru" v-model='postdata.document.content' placeholder="文章を入力"></textarea>
+      </v-ons-list-item>
+      <div id = "buttom_area">
+        <div class="analyze_buttom">
+          <v-ons-button  @click="go()">感情分析</v-ons-button>
+        </div>
+        <div class="clear_buttom">
+          <v-ons-button style="background-color:rgb(156, 20, 20)" @click="textClear()">クリア</v-ons-button>
+        </div>
+      </div>
+      <div>
+        <p>点数！</p>
+        <p>{{sentiment_score}}</p>
+      </div>
+      
+  </v-ons-card>
   <v-ons-button @click="page()">ページ遷移 </v-ons-button>
   </v-ons-page>
 </template>
@@ -124,13 +151,17 @@ export default {
       this.axios.post('https://language.googleapis.com/v1/documents:analyzeSentiment?key=AIzaSyDzdTDDNFQ9STkA1bfGEcUnlxgpvFLrEL0',this.postdata)
       .then((res) => {
         console.log(res);
-        //this.experiences = res.data
+        this.sentiment_score = res.data.documentSentiment.score  * 100
       })
       .catch(error => {
           this.sending = false
           throw error
       })
 
+    },
+    textClear(){
+      this.postdata.document.content = "" 
+      this.sentiment_score = 0
     },
     page(){
       this.$router.push({ name: 'sentiment'}); 
@@ -152,6 +183,9 @@ export default {
         },
         encodingType: 'UTF8'
       },
+      res_data:[],
+      sentiment_score: 0
+
     };
   },
   created() {
