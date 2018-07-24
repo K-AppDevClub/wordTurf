@@ -179,7 +179,7 @@ export default {
       postdata: {
         document: {  
           type:"PLAIN_TEXT",
-        　content:"あなたのこと大好き" 
+        　content:"あなたのことが大好きだ" 
         },
         encodingType: 'UTF8'
       },
