@@ -2,22 +2,13 @@
   <ons-page>
     <navbar navType="back"></navbar>
     <el-card class="box-card">
-        <div class="title">
-          
+        <div class="result">
+          result
+        <p>{{$route.params.score}}点</p>
+        <p>{{$route.params.content}}</p>
         </div>
-        <div class="pull-right" mergin-top="20px" > 作成者:hoshinari</div>
-    </el-card>
-    <el-card class="box-card">
-        <div class="bold">概要</div>
-    </el-card>
-    <el-card class="box-card">
-        <div class="bold">コース</div>
-        
-    </el-card>
-    <el-card class="box-card">
-        <div class="bold">感想</div>
-        <p></p>
-    </el-card>
+     </el-card>
+     <v-ons-button  @click="gohome()">戻る</v-ons-button>
   </ons-page>
 </template>
 
@@ -39,16 +30,6 @@ export default {
       post: [],
       courses: [],
       value1: '',
-      items: [
-        {
-          id: 1,
-          src: 'http://journey-on-map.up.n.seesaa.net/journey-on-map/image/E382B9E382ABE382A4E38384E383AAE383BC.JPG?d=a2',
-        },
-        {
-          id: 2,
-          src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Tokyo_Dome_2007-12.jpg/1920px-Tokyo_Dome_2007-12.jpg',
-        }
-      ]
     };
   },
   methods: {
@@ -63,8 +44,10 @@ export default {
         return '';
       }
     },
-  },
-
+    gohome() {
+      this.$router.push({ name: 'home' });
+    }
+  }
 
   // data() {
   //   return {
@@ -107,14 +90,16 @@ export default {
   left: 0;
   margin: auto;
   }
-  .title{
+  .result{
     font-weight:bold;
     font-size: 24px;
+    text-align: center;
   }
   .bold{
     font-weight:bold;
     font-size: 18px;
   }
+
 </style>
 
 
