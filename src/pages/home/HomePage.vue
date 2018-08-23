@@ -149,14 +149,13 @@ export default {
           this.sending = false
           throw error
       })
-
     },
     textClear(){
       this.postdata.document.content = "" 
       this.sentiment_score = 0
     },
     page(){
-      this.$router.push({ name: 'sentiment'}); 
+      this.$router.push({ name: 'sentiment', params:  {score: this.sentiment_score, content: this.postdata.document.content} }); 
     }
   },
 
