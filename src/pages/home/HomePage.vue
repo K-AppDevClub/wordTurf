@@ -60,6 +60,10 @@
         <p>点数！</p>
         <p>{{sentiment_score}}</p>
       </div>
+      <div>
+        <p>total score</p>
+        <p>{{total_score}}</p>
+      </div>
       
   </v-ons-card>
   <v-ons-button @click="page()">ページ遷移 </v-ons-button>
@@ -78,8 +82,7 @@ export default {
     Navbar,
   },
   methods: {
-    imageset() {
-      var score = this.sentiment_score;
+    imageset: function(score) {
       if (score >= 0 && score <= 15){
         return this.image2;
       }
@@ -142,7 +145,8 @@ export default {
         console.log(res);
         this.sentiment_score = res.data.documentSentiment.score  * 100;
         //simageset(this.sentiment_score) 
-        this.image = this.imageset();
+        this.image = this.imageset(this.total_score);
+        this.setItem();
 
       })
       .catch(error => {
@@ -155,7 +159,14 @@ export default {
       this.sentiment_score = 0
     },
     page(){
-      this.$router.push({ name: 'sentiment', params:  {score: this.sentiment_score, content: this.postdata.document.content} }); 
+      this.$router.push({ name: 'sentiment'}); 
+    },
+    addPoints() {
+      this.points.push('point_' + this.points.length);
+      this.setPoints();
+    },
+    setItem() {
+      localStorage.setItem('points', JSON.stringify(this.sentiment_score));
     }
   },
 
@@ -188,52 +199,17 @@ export default {
         encodingType: 'UTF8'
       },
       res_data:[],
-      sentiment_score: 0
+      sentiment_score: 0,
+
+      points: [],
+      total_score: 0,
+      json: ''
 
     };
   },
-  created() {
-    var date = new Date();
-    this.calData.year = date.getFullYear();
-    this.calData.month = date.getMonth() + 1;
-  },
   mounted(){
-    
-  },
-  computed: {
-    calendar () {
-      // 1日の曜日
-      var firstDay = new Date(this.calData.year, this.calData.month - 1, 1).getDay();
-      // 晦日の日にち
-      var lastDate = new Date(this.calData.year, this.calData.month, 0).getDate();
-      // 日にちのカウント
-      var dayIdx = 1;
-
-      var calendar = [];
-      for (var w = 0; w < 6; w++) {
-        var week = [];
-
-        // 空白行をなくすため
-        if (lastDate < dayIdx) {break;}
-
-        for (var d = 0; d < 7; d++) {
-          if (w == 0 && d < firstDay) {
-            week[d] = {day: ''};
-          } else if (w == 6 && lastDate < dayIdx) {
-            week[d] = {day: ''};
-            dayIdx++;
-          } else if (lastDate < dayIdx) {
-            week[d] = {day: ''};
-            dayIdx++;
-          } else {
-            week[d] = {day: dayIdx};
-            dayIdx++;
-          }
-        }
-        calendar.push(week);
-      }
-      return calendar;
-    }
+    this.total_score = JSON.parse(localStorage.getItem('points')) || [];
+    this.image = this.imageset(this.total_score);
   }
 };
 </script>
