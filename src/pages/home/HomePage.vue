@@ -60,6 +60,10 @@
         <p>点数！</p>
         <p>{{sentiment_score}}</p>
       </div>
+      <div>
+        <p>total score</p>
+        <p>{{total_score}}</p>
+      </div>
       
   </v-ons-card>
   <v-ons-button @click="page()">ページ遷移 </v-ons-button>
@@ -78,8 +82,7 @@ export default {
     Navbar,
   },
   methods: {
-    imageset() {
-      var score = this.sentiment_score;
+    imageset: function(score) {
       if (score >= 0 && score <= 15){
         return this.image2;
       }
@@ -142,7 +145,8 @@ export default {
         console.log(res);
         this.sentiment_score = res.data.documentSentiment.score  * 100;
         //simageset(this.sentiment_score) 
-        this.image = this.imageset();
+        this.image = this.imageset(this.total_score);
+        this.setItem();
 
       })
       .catch(error => {
@@ -157,6 +161,13 @@ export default {
     },
     page(){
       this.$router.push({ name: 'sentiment'}); 
+    },
+    addPoints() {
+      this.points.push('point_' + this.points.length);
+      this.setPoints();
+    },
+    setItem() {
+      localStorage.setItem('points', JSON.stringify(this.sentiment_score));
     }
   },
 
@@ -189,7 +200,11 @@ export default {
         encodingType: 'UTF8'
       },
       res_data:[],
-      sentiment_score: 0
+      sentiment_score: 0,
+
+      points: [],
+      total_score: 0,
+      json: ''
 
     };
   },
@@ -199,7 +214,8 @@ export default {
     this.calData.month = date.getMonth() + 1;
   },
   mounted(){
-    
+    this.total_score = JSON.parse(localStorage.getItem('points')) || [];
+    this.image = this.imageset(this.total_score);
   },
   computed: {
     calendar () {
