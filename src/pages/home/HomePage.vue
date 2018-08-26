@@ -57,16 +57,12 @@
         </div>
       </div>
       <div>
-        <p>点数！</p>
-        <p>{{sentiment_score}}</p>
-      </div>
-      <div>
-        <p>total score</p>
+        <p>Total score</p>
         <p>{{total_score}}</p>
       </div>
       
   </v-ons-card>
-  <v-ons-button @click="page()">ページ遷移 </v-ons-button>
+  <v-ons-button @click="resetItem()">トータルスコア　リセット </v-ons-button>
   </v-ons-page>
 </template>
 
@@ -98,7 +94,7 @@ export default {
       else if(score > 65 && score <= 80){
         return this.image6;
       } 
-      else if(score > 80 && score <= 100){
+      else if(score > 80){
         return this.image7;
       }
       else if(score < 0 && score >= -10){
@@ -117,56 +113,43 @@ export default {
         return this.image12;
       }
     },
-    getMonthName: function(month) {
-      var monthName = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-      return monthName[month - 1];
-    },
-    moveLastMonth: function() {
-      if (this.calData.month == 1) {
-          this.calData.year--;
-          this.calData.month = 12;
-      }
-      else {
-          this.calData.month--;
-      }
-    },
-    moveNextMonth: function() {
-      if (this.calData.month == 12) {
-          this.calData.year++;
-          this.calData.month = 1;
-      }
-      else {
-          this.calData.month++;
-      }
-    },
     go(){
-      this.axios.post('https://language.googleapis.com/v1/documents:analyzeSentiment?key=AIzaSyDzdTDDNFQ9STkA1bfGEcUnlxgpvFLrEL0',this.postdata)
-      .then((res) => {
-        console.log(res);
-        this.sentiment_score = res.data.documentSentiment.score  * 100;
-        //simageset(this.sentiment_score) 
-        this.image = this.imageset(this.total_score);
-        this.setItem();
-
-      })
-      .catch(error => {
-          this.sending = false
-          throw error
-      })
+      if(this.postdata.document.content == ""){
+        this.$ons.notification.alert('文章を入力してください');
+      }else{
+        this.axios.post('https://language.googleapis.com/v1/documents:analyzeSentiment?key=AIzaSyDzdTDDNFQ9STkA1bfGEcUnlxgpvFLrEL0',this.postdata)
+        .then((res) => {
+          console.log(res);
+          this.sentiment_score = res.data.documentSentiment.score  * 100;
+          this.image = this.imageset(this.total_score);
+          this.points = this.total_score + this.sentiment_score
+          this.setItem();
+          this.page();
+        })
+        .catch(error => {
+            this.sending = false
+            throw error
+        })
+      }
     },
     textClear(){
       this.postdata.document.content = "" 
       this.sentiment_score = 0
     },
     page(){
-      this.$router.push({ name: 'sentiment'}); 
+      this.$router.push({ name: 'sentiment', params:  {score: this.sentiment_score, content: this.postdata.document.content} }); 
     },
     addPoints() {
       this.points.push('point_' + this.points.length);
       this.setPoints();
     },
     setItem() {
-      localStorage.setItem('points', JSON.stringify(this.sentiment_score));
+      localStorage.setItem('points', JSON.stringify(this.points));
+    },
+    resetItem(){
+      this.points = 0;
+      this.setItem();
+      location.reload();
     }
   },
 
@@ -185,22 +168,15 @@ export default {
       image10: require('../../../images/ゴミ2.png'),
       image11: require('../../../images/ゴミ3.png'),
       image12: require('../../../images/ゴミ4.png'),
-      weeks: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-      calData: {year: 0, month: 0},
-      users: [
-        { name: 'Foo Bar', email: 'foo@bar.com' },
-        { name: 'John Doh', email: 'john@doh.com' }
-      ],
       postdata: {
         document: {  
           type:"PLAIN_TEXT",
-        　content:"あなたのことが大好きだ" 
+        　content: []
         },
         encodingType: 'UTF8'
       },
       res_data:[],
       sentiment_score: 0,
-
       points: [],
       total_score: 0,
       json: ''
@@ -208,7 +184,7 @@ export default {
     };
   },
   mounted(){
-    this.total_score = JSON.parse(localStorage.getItem('points')) || [];
+    this.total_score = JSON.parse(localStorage.getItem('points')) || 0;
     this.image = this.imageset(this.total_score);
   }
 };

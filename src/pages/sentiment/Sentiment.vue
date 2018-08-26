@@ -45,7 +45,7 @@ export default {
       }
     },
     gohome() {
-      this.$router.push({ name: 'home' });
+      this.$router.go(-1);
     }
   }
 
