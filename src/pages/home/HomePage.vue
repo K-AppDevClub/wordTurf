@@ -18,51 +18,71 @@
   cursor: pointer;
 }
 
-/* カレンダーのスタイル */
-.table th, td{
+#card1{
+  background: #FFFAFA;
+}
+#card2{
+  background: #FFF5EE;
+}
+#center{
+  text-align: center;
+  // background: #FFFFE0;
+}
+
+#total{
+  font-family: cursive;
+  font-size: 40px;
+}
+
+#score{
+  font-family: cursive;
+  font-size: 60px;
+  color: #FF0000;
+}
+
+.relative{
   text-align: center;
 }
-#buttom_area{
-  text-align: center;
-  margin-top: 10px;
-}
+
 .analyze_buttom{
-  display: inline-block;
-}
-.clear_buttom{
-  display: inline-block;
+  text-align: right;
 }
 </style>
+
 
 <template>
   <v-ons-page>
     <navbar></navbar>
-    <v-ons-card modifier="material">
+    
+    <v-ons-card id="card1">
+      <div id="center">
+        <span id="total">Happy score   </span>
+        <span id="score">{{total_score}}</span>
+      </div>
+    <!-- </v-ons-card>
+
+    <v-ons-card mdifier="material"> -->
       <div class="relative">
         <img :src="image" class="back">
       </div>
       <br>
     </v-ons-card>
 
-    <v-ons-card>
+    <v-ons-card id="card2">
       <v-ons-list-item>
         <textarea style="width:100%;height:90px" name="code_ireru" v-model='postdata.document.content' placeholder="文章を入力"></textarea>
       </v-ons-list-item>
       <div id = "buttom_area">
         <div class="analyze_buttom">
-          <v-ons-button  @click="go()">感情分析</v-ons-button>
+          <v-ons-button style="background-color:rgb(184,134,11)" @click="go()">感情分析</v-ons-button>
         </div>
-        <div class="clear_buttom">
+        <!-- <div class="clear_buttom">
           <v-ons-button style="background-color:rgb(156, 20, 20)" @click="textClear()">クリア</v-ons-button>
-        </div>
-      </div>
-      <div>
-        <p>Total score</p>
-        <p>{{total_score}}</p>
+        </div> -->
       </div>
       
   </v-ons-card>
-  <v-ons-button @click="resetItem()">トータルスコア　リセット </v-ons-button>
+  <v-ons-button style="background-color:rgb(245,222,179)" @click="resetItem()">Totalscore reset </v-ons-button>
   </v-ons-page>
 </template>
 
