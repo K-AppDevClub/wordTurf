@@ -1303,6 +1303,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "src": _vm.image
     }
+  }), _vm._v(" "), _c('div', {
+    attrs: {
+      "id": "trapezoid"
+    }
   })]), _vm._v(" "), _c('br')]), _vm._v(" "), _c('v-ons-card', {
     attrs: {
       "id": "card2"
