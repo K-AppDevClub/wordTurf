@@ -5,28 +5,15 @@
 .body {
   margin-top: 50px;
 }
-#calendar-nav {
-  text-align: center;
-}
-
-#calendar-nav span {
-  display: inline-block;
-  width: 200px;
-}
-
-#calendar-nav i:hover {
-  cursor: pointer;
-}
-
 #card1{
   background: #FFFAFA;
+  // background: #FFF5EE;
 }
 #card2{
   background: #FFF5EE;
 }
 #center{
   text-align: center;
-  // background: #FFFFE0;
 }
 
 #total{
@@ -37,7 +24,15 @@
 #score{
   font-family: cursive;
   font-size: 60px;
-  color: #FF0000;
+  color: #228B22;
+}
+
+#trapezoid{
+  text-align: center;
+  border-bottom: 30px solid #cb9c70;
+  border-left: 25px solid transparent;
+  border-right: 25px solid transparent;
+  
 }
 
 .relative{
@@ -64,6 +59,7 @@
     <v-ons-card mdifier="material"> -->
       <div class="relative">
         <img :src="image" class="back">
+        <div id="trapezoid"></div>
       </div>
       <br>
     </v-ons-card>
