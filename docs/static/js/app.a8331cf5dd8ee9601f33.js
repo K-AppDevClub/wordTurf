@@ -1282,16 +1282,32 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('v-ons-page', [_c('navbar'), _vm._v(" "), _c('v-ons-card', {
     attrs: {
-      "modifier": "material"
+      "id": "card1"
     }
   }, [_c('div', {
+    attrs: {
+      "id": "center"
+    }
+  }, [_c('span', {
+    attrs: {
+      "id": "total"
+    }
+  }, [_vm._v("Happy score   ")]), _vm._v(" "), _c('span', {
+    attrs: {
+      "id": "score"
+    }
+  }, [_vm._v(_vm._s(_vm.total_score))])]), _vm._v(" "), _c('div', {
     staticClass: "relative"
   }, [_c('img', {
     staticClass: "back",
     attrs: {
       "src": _vm.image
     }
-  })]), _vm._v(" "), _c('br')]), _vm._v(" "), _c('v-ons-card', [_c('v-ons-list-item', [_c('textarea', {
+  })]), _vm._v(" "), _c('br')]), _vm._v(" "), _c('v-ons-card', {
+    attrs: {
+      "id": "card2"
+    }
+  }, [_c('v-ons-list-item', [_c('textarea', {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -1322,29 +1338,24 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "analyze_buttom"
   }, [_c('v-ons-button', {
+    staticStyle: {
+      "background-color": "rgb(184,134,11)"
+    },
     on: {
       "click": function($event) {
         _vm.go()
       }
     }
-  }, [_vm._v("感情分析")])], 1), _vm._v(" "), _c('div', {
-    staticClass: "clear_buttom"
-  }, [_c('v-ons-button', {
+  }, [_vm._v("感情分析")])], 1)])], 1), _vm._v(" "), _c('v-ons-button', {
     staticStyle: {
-      "background-color": "rgb(156, 20, 20)"
+      "background-color": "rgb(245,222,179)"
     },
-    on: {
-      "click": function($event) {
-        _vm.textClear()
-      }
-    }
-  }, [_vm._v("クリア")])], 1)]), _vm._v(" "), _c('div', [_c('p', [_vm._v("Total score")]), _vm._v(" "), _c('p', [_vm._v(_vm._s(_vm.total_score))])])], 1), _vm._v(" "), _c('v-ons-button', {
     on: {
       "click": function($event) {
         _vm.resetItem()
       }
     }
-  }, [_vm._v("トータルスコア　リセット ")])], 1)
+  }, [_vm._v("Totalscore reset ")])], 1)
 },staticRenderFns: []}
 
 /***/ }),
